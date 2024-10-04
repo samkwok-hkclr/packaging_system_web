@@ -4,22 +4,15 @@ import ROSLIB from 'roslib';
 import { Button, Form, Table } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 
-const Temperature = ({ros, namespace}) => {
+const Temperature = ({ros, namespace, sendTpdo}) => {
   const [tpdoPublisher, setTpdoPublisher] = useState(null);
   const [temperature, setTemperature] = useState(0);
+  const [temperatureAdc, setTemperatureAdc] = useState(0);
 
   useEffect(() => {
     if (!ros) {
       return;
     }
-
-    const tpdo = new ROSLIB.Topic({
-      ros: ros,
-      name: '/' + namespace + '/tpdo',
-      messageType: 'canopen_interfaces/msg/COData',
-    });
-
-    setTpdoPublisher(tpdo);
 
     const rpdo = new ROSLIB.Topic({
       ros: ros,
@@ -33,40 +26,31 @@ const Temperature = ({ros, namespace}) => {
         case 0x6001:
           setTemperature(msg.data);
           break;
+        case 0x6002:
+          setTemperatureAdc(msg.data);
+          break;
       }
+      // rpdo.unsubscribe();
     })
 
-    return () => {
-      tpdo.unadvertise();
-      setTpdoPublisher(null);
-    };
-  }, [ros]);
-
-  const sendTpdo = (index, subindex, data) => {
-    const msg = new ROSLIB.Message({
-      index: index,
-      subindex: subindex,
-      data: data,
-    });
-    console.log('ok')
-    tpdoPublisher.publish(msg);
-  };
+  }, []);
 
   return (
     <Card className="mb-4" style={{ width: '48rem' }}>
       <Card.Body>
         Temperature: {temperature}/125 
+        T_ADC: {temperatureAdc}/4096 
       </Card.Body>
       <Button
           variant="outline-secondary"
-          onClick={() => sendTpdo(0x6003, 0, 1)}
+          onClick={() => sendTpdo(0x6003, 0, 0)}
           style={{ marginLeft: '0.5rem' }}
         >
         Heat On
       </Button>
       <Button
         variant="outline-secondary"
-        onClick={() => sendTpdo(0x6003, 0, 0)}
+        onClick={() => sendTpdo(0x6003, 0, 1)}
         style={{ marginLeft: '0.5rem' }}
       >
         Heat Off

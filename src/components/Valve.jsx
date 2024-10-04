@@ -4,8 +4,7 @@ import ROSLIB from 'roslib';
 import { Button, Form, Table } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 
-const Valve = ({ros, namespace}) => {
-  const [tpdoPublisher, setTpdoPublisher] = useState(null);
+const Valve = ({ros, namespace, sendTpdo}) => {
   const [valve1Status, setValve1Status] = useState('Off');
   const [valve2Status, setValve2Status] = useState('Off');
   const [valve3Status, setValve3Status] = useState('Off');
@@ -23,53 +22,51 @@ const Valve = ({ros, namespace}) => {
       return;
     }
 
-    const tpdo = new ROSLIB.Topic({
+    // const rpdo = new ROSLIB.Topic({
+    //   ros: ros,
+    //   name: '/' + namespace + '/rpdo',
+    //   messageType: 'canopen_interfaces/msg/COData',
+    // });
+
+    // rpdo.subscribe((msg) => {
+    //   switch (msg.index)
+    //   {
+    //     case 0x6054:
+    //       setValve1Status(msg.data === 1 ? 'On' : 'Off');
+    //       break;
+    //     case 0x6055:
+    //       setValve2Status(msg.data ? 'On' : 'Off');
+    //       break;
+    //     case 0x6056:
+    //       setValve3Status(msg.data ? 'On' : 'Off');
+    //       break;
+    //     case 0x6057:
+    //       setValve4Status(msg.data ? 'On' : 'Off');
+    //       break;
+    //   }
+    //   // rpdo.unsubscribe();
+    // })
+
+    var sdoRead = new ROSLIB.Service({
       ros: ros,
-      name: '/' + namespace + '/tpdo',
-      messageType: 'canopen_interfaces/msg/COData',
+      name: '/' + namespace + '/sdo_read',
+      serviceType: 'canopen_interfaces/srv/CORead'
+    });
+    
+    var request = new ROSLIB.ServiceRequest({
+      index: 0x6054,
+      subindex: 0
     });
 
-    setTpdoPublisher(tpdo);
-
-    const rpdo = new ROSLIB.Topic({
-      ros: ros,
-      name: '/' + namespace + '/rpdo',
-      messageType: 'canopen_interfaces/msg/COData',
+    sdoRead.callService(request, (result) => {
+      setValve1Status(result.data == 1 ? 'On' : 'Off');
+      console.log('Result for service call on '
+      + sdoRead.name
+      + ': '
+      + result.data);
     });
 
-    rpdo.subscribe((msg) => {
-      switch (msg.index)
-      {
-        case 0x6054:
-          setValve1Status(msg.data ? 'On' : 'Off');
-          break;
-        case 0x6055:
-          setValve2Status(msg.data ? 'On' : 'Off');
-          break;
-        case 0x6056:
-          setValve3Status(msg.data ? 'On' : 'Off');
-          break;
-        case 0x6057:
-          setValve4Status(msg.data ? 'On' : 'Off');
-          break;
-      }
-    })
-
-    return () => {
-      tpdo.unadvertise();
-      setTpdoPublisher(null);
-    };
-  }, [ros]);
-
-  const sendTpdo = (index, subindex, data) => {
-    const msg = new ROSLIB.Message({
-      index: index,
-      subindex: subindex,
-      data: data,
-    });
-
-    tpdoPublisher.publish(msg);
-  };
+  }, []);
 
   return (
     <Card className="mb-4" style={{ width: '48rem' }}>
