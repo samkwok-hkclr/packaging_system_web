@@ -5,16 +5,20 @@ import { Button, Form, Table } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 
 const Valve = ({ros, namespace, sendTpdo}) => {
-  const [valve1Status, setValve1Status] = useState('Off');
-  const [valve2Status, setValve2Status] = useState('Off');
-  const [valve3Status, setValve3Status] = useState('Off');
-  const [valve4Status, setValve4Status] = useState('Off');
+  const [valveStatus, setValveStatus] = useState(['Off', 'Off', 'Off', 'Off']);
 
-  const valveAddresses = {
+  const valveCtrlAddr = {
     1: 0x6050,
     2: 0x6051,
     3: 0x6052,
     4: 0x6053,
+  };
+
+  const valveStatusAddr = {
+    1: 0x6054,
+    2: 0x6055,
+    3: 0x6056,
+    4: 0x6057,
   };
 
   useEffect(() => {
@@ -22,51 +26,36 @@ const Valve = ({ros, namespace, sendTpdo}) => {
       return;
     }
 
-    // const rpdo = new ROSLIB.Topic({
-    //   ros: ros,
-    //   name: '/' + namespace + '/rpdo',
-    //   messageType: 'canopen_interfaces/msg/COData',
-    // });
+    const intervals = Object.values(valveStatusAddr).map((address, index) => {
+      return setInterval(() => {
+        const sdoRead = new ROSLIB.Service({
+          ros: ros,
+          name: '/' + namespace + '/sdo_read',
+          serviceType: 'canopen_interfaces/srv/CORead',
+        });
 
-    // rpdo.subscribe((msg) => {
-    //   switch (msg.index)
-    //   {
-    //     case 0x6054:
-    //       setValve1Status(msg.data === 1 ? 'On' : 'Off');
-    //       break;
-    //     case 0x6055:
-    //       setValve2Status(msg.data ? 'On' : 'Off');
-    //       break;
-    //     case 0x6056:
-    //       setValve3Status(msg.data ? 'On' : 'Off');
-    //       break;
-    //     case 0x6057:
-    //       setValve4Status(msg.data ? 'On' : 'Off');
-    //       break;
-    //   }
-    //   // rpdo.unsubscribe();
-    // })
+        const request = new ROSLIB.ServiceRequest({
+          index: address,
+          subindex: 0,
+        });
 
-    var sdoRead = new ROSLIB.Service({
-      ros: ros,
-      name: '/' + namespace + '/sdo_read',
-      serviceType: 'canopen_interfaces/srv/CORead'
-    });
-    
-    var request = new ROSLIB.ServiceRequest({
-      index: 0x6054,
-      subindex: 0
+        sdoRead.callService(request, (result) => {
+          // Update the valve status based on the result
+          const newStatus = result.data ? 'On' : 'Off';
+          setValveStatus((prevStatus) => {
+            const updatedStatus = [...prevStatus];
+            updatedStatus[index] = newStatus; // Update the status for the correct valve
+            return updatedStatus;
+          });
+        });
+      }, 500);
     });
 
-    sdoRead.callService(request, (result) => {
-      setValve1Status(result.data == 1 ? 'On' : 'Off');
-      console.log('Result for service call on '
-      + sdoRead.name
-      + ': '
-      + result.data);
-    });
-
-  }, []);
+    // Clear intervals on component unmount
+    return () => {
+      intervals.forEach(clearInterval);
+    };
+  }, [ros, namespace]);
 
   return (
     <Card className="mb-4" style={{ width: '48rem' }}>
@@ -83,18 +72,18 @@ const Valve = ({ros, namespace, sendTpdo}) => {
           {[1, 2, 3, 4].map((valve) => (
             <tr key={valve}>
               <td>{valve}</td>
-              <td>{eval(`valve${valve}Status`)}</td>
+              <td>{valveStatus[valve - 1]}</td>
               <td>
                 <Button
                   variant="outline-secondary"
-                  onClick={() => sendTpdo(valveAddresses[valve], 0, 1)}
+                  onClick={() => sendTpdo(valveCtrlAddr[valve], 0, 1)}
                   style={{ marginLeft: '0.5rem' }}
                 >
                   On
                 </Button>
                 <Button
                   variant="outline-secondary"
-                  onClick={() => sendTpdo(valveAddresses[valve], 0, 0)}
+                  onClick={() => sendTpdo(valveCtrlAddr[valve], 0, 0)}
                   style={{ marginLeft: '0.5rem' }}
                 >
                   Off

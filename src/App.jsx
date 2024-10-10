@@ -11,6 +11,7 @@ import Valve from './components/Valve';
 import { Row, Col } from 'react-bootstrap';
 
 import './App.css'
+import RollerMotor from './components/RollerMotor';
 
 function App() {
   const [ros, setRos] = useState(null);
@@ -51,6 +52,13 @@ function App() {
           </Row>
           <Row>
             <Valve 
+              ros={ros} 
+              namespace={"packaging_machine_1"}
+              sendTpdo={sendTpdo} 
+            />
+          </Row>
+          <Row>
+            <RollerMotor 
               ros={ros} 
               namespace={"packaging_machine_1"}
               sendTpdo={sendTpdo} 

@@ -7,7 +7,6 @@ import Card from 'react-bootstrap/Card';
 const Temperature = ({ros, namespace, sendTpdo}) => {
   const [tpdoPublisher, setTpdoPublisher] = useState(null);
   const [temperature, setTemperature] = useState(0);
-  const [temperatureAdc, setTemperatureAdc] = useState(0);
 
   useEffect(() => {
     if (!ros) {
@@ -26,9 +25,6 @@ const Temperature = ({ros, namespace, sendTpdo}) => {
         case 0x6001:
           setTemperature(msg.data);
           break;
-        case 0x6002:
-          setTemperatureAdc(msg.data);
-          break;
       }
       // rpdo.unsubscribe();
     })
@@ -39,7 +35,6 @@ const Temperature = ({ros, namespace, sendTpdo}) => {
     <Card className="mb-4" style={{ width: '48rem' }}>
       <Card.Body>
         Temperature: {temperature}/125 
-        T_ADC: {temperatureAdc}/4096 
       </Card.Body>
       <Button
           variant="outline-secondary"
