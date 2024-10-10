@@ -15,17 +15,6 @@ import RollerMotor from './components/RollerMotor';
 
 function App() {
   const [ros, setRos] = useState(null);
-  const [tpdoPublisher, setTpdoPublisher] = useState(null);
-
-  const sendTpdo = (index, subindex, data) => {
-    const msg = new ROSLIB.Message({
-      index: index,
-      subindex: subindex,
-      data: data,
-    });
-
-    tpdoPublisher.publish(msg);
-  };
 
   return (
     <>
@@ -38,32 +27,24 @@ function App() {
       {
         ros &&
         <>
-          <TpdoPublisher 
-            ros={ros} 
-            namespace={"packaging_machine_1"} 
-            setTpdoPublisher={setTpdoPublisher}
-          />
           <Row>
             <Temperature 
               ros={ros} 
               namespace={"packaging_machine_1"} 
-              sendTpdo={sendTpdo}
             />
           </Row>
           <Row>
             <Valve 
               ros={ros} 
               namespace={"packaging_machine_1"}
-              sendTpdo={sendTpdo} 
             />
           </Row>
-          <Row>
+          {/* <Row>
             <RollerMotor 
               ros={ros} 
               namespace={"packaging_machine_1"}
-              sendTpdo={sendTpdo} 
             />
-          </Row>
+          </Row> */}
         </>
       }
     </>

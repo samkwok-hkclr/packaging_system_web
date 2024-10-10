@@ -4,8 +4,9 @@ import ROSLIB from 'roslib';
 import { Button, Form, Table } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 
-const Valve = ({ros, namespace, sendTpdo}) => {
+const Valve = ({ros, namespace}) => {
   const [valveStatus, setValveStatus] = useState(['Off', 'Off', 'Off', 'Off']);
+  const [sdoWriter, setSdoWriter] = useState(null);
 
   const valveCtrlAddr = {
     1: 0x6050,
@@ -26,6 +27,23 @@ const Valve = ({ros, namespace, sendTpdo}) => {
       return;
     }
 
+    const sdoWrite = new ROSLIB.Service({
+      ros: ros,
+      name: '/' + namespace + '/sdo_write',
+      serviceType: 'canopen_interfaces/srv/COWrite',
+    });
+
+    setSdoWriter(sdoWrite);
+
+    return () => {
+    };
+  }, [ros, namespace]);
+
+  useEffect(() => {
+    if (!ros) {
+      return;
+    }
+
     const intervals = Object.values(valveStatusAddr).map((address, index) => {
       return setInterval(() => {
         const sdoRead = new ROSLIB.Service({
@@ -40,22 +58,32 @@ const Valve = ({ros, namespace, sendTpdo}) => {
         });
 
         sdoRead.callService(request, (result) => {
-          // Update the valve status based on the result
           const newStatus = result.data ? 'On' : 'Off';
           setValveStatus((prevStatus) => {
             const updatedStatus = [...prevStatus];
-            updatedStatus[index] = newStatus; // Update the status for the correct valve
+            updatedStatus[index] = newStatus; 
             return updatedStatus;
           });
         });
-      }, 500);
+      }, 1000);
     });
 
-    // Clear intervals on component unmount
     return () => {
       intervals.forEach(clearInterval);
     };
   }, [ros, namespace]);
+
+  const sendSDO = ((index, subindex, data)=> {
+    
+    const request = new ROSLIB.ServiceRequest({
+      index: index,
+      subindex: subindex,
+      data:data
+    });
+    
+    sdoWriter.callService(request, (result) => {
+    });
+  })
 
   return (
     <Card className="mb-4" style={{ width: '48rem' }}>
@@ -76,14 +104,14 @@ const Valve = ({ros, namespace, sendTpdo}) => {
               <td>
                 <Button
                   variant="outline-secondary"
-                  onClick={() => sendTpdo(valveCtrlAddr[valve], 0, 1)}
+                  onClick={() => sendSDO(valveCtrlAddr[valve], 0, 1)}
                   style={{ marginLeft: '0.5rem' }}
                 >
                   On
                 </Button>
                 <Button
                   variant="outline-secondary"
-                  onClick={() => sendTpdo(valveCtrlAddr[valve], 0, 0)}
+                  onClick={() => sendSDO(valveCtrlAddr[valve], 0, 0)}
                   style={{ marginLeft: '0.5rem' }}
                 >
                   Off

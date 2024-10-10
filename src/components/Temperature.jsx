@@ -4,8 +4,7 @@ import ROSLIB from 'roslib';
 import { Button, Form, Table } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 
-const Temperature = ({ros, namespace, sendTpdo}) => {
-  const [tpdoPublisher, setTpdoPublisher] = useState(null);
+const Temperature = ({ros, namespace}) => {
   const [temperature, setTemperature] = useState(0);
 
   useEffect(() => {
@@ -36,7 +35,7 @@ const Temperature = ({ros, namespace, sendTpdo}) => {
       <Card.Body>
         Temperature: {temperature}/125 
       </Card.Body>
-      <Button
+      {/* <Button
           variant="outline-secondary"
           onClick={() => sendTpdo(0x6003, 0, 0)}
           style={{ marginLeft: '0.5rem' }}
@@ -49,10 +48,9 @@ const Temperature = ({ros, namespace, sendTpdo}) => {
         style={{ marginLeft: '0.5rem' }}
       >
         Heat Off
-      </Button>
+      </Button> */}
     </Card>
   )
-
 }
 
 export default Temperature
