@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import ROSLIB from 'roslib';
 
-import { Button, Form, Table } from 'react-bootstrap';
-import Card from 'react-bootstrap/Card';
-
 const Temperature = ({ros, namespace}) => {
+
   const [temperature, setTemperature] = useState(0);
 
   useEffect(() => {
@@ -25,31 +23,18 @@ const Temperature = ({ros, namespace}) => {
           setTemperature(msg.data);
           break;
       }
-      // rpdo.unsubscribe();
+      rpdo.unsubscribe();
     })
 
   }, []);
 
   return (
-    <Card className="mb-4" style={{ width: '48rem' }}>
-      <Card.Body>
-        Temperature: {temperature}/125 
-      </Card.Body>
-      {/* <Button
-          variant="outline-secondary"
-          onClick={() => sendTpdo(0x6003, 0, 0)}
-          style={{ marginLeft: '0.5rem' }}
-        >
-        Heat On
-      </Button>
-      <Button
-        variant="outline-secondary"
-        onClick={() => sendTpdo(0x6003, 0, 1)}
-        style={{ marginLeft: '0.5rem' }}
-      >
-        Heat Off
-      </Button> */}
-    </Card>
+    <div className='outContainer'>
+      <h3>Heater:</h3>
+      <div className="borderContainer">
+        <h4>Temperature : {temperature} / 125 </h4>
+      </div>
+    </div>
   )
 }
 

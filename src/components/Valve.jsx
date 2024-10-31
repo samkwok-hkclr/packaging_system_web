@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ROSLIB from 'roslib';
 
-import { Button, Form, Table } from 'react-bootstrap';
-import Card from 'react-bootstrap/Card';
-
 const Valve = ({ros, namespace}) => {
   const [valveStatus, setValveStatus] = useState(['Off', 'Off', 'Off', 'Off']);
   const [sdoWriter, setSdoWriter] = useState(null);
@@ -86,12 +83,12 @@ const Valve = ({ros, namespace}) => {
   })
 
   return (
-    <Card className="mb-4" style={{ width: '48rem' }}>
-    <Card.Body>
-      <Table striped bordered hover>
+    <div className='outContainer'>
+      <h3>Solenoid Value:</h3>
+      <table className='valueTable'>
         <thead>
           <tr>
-            <th>Valve</th>
+            <th>Valve ID</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
@@ -102,27 +99,24 @@ const Valve = ({ros, namespace}) => {
               <td>{valve}</td>
               <td>{valveStatus[valve - 1]}</td>
               <td>
-                <Button
-                  variant="outline-secondary"
+                <button
                   onClick={() => sendSDO(valveCtrlAddr[valve], 0, 1)}
-                  style={{ marginLeft: '0.5rem' }}
+                  className={`btn ${valveStatus[valve - 1]==='On'?'chosen':''}`}
                 >
                   On
-                </Button>
-                <Button
-                  variant="outline-secondary"
+                </button>
+                <button
                   onClick={() => sendSDO(valveCtrlAddr[valve], 0, 0)}
-                  style={{ marginLeft: '0.5rem' }}
+                  className={`btn ${valveStatus[valve - 1]==='Off'?'chosen':''}`}
                 >
                   Off
-                </Button>
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
-      </Table>
-    </Card.Body>
-  </Card>
+      </table>
+    </div>
   )
 }
 

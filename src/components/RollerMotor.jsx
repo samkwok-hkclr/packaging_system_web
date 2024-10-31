@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ROSLIB from 'roslib';
 
-import { Button, Form, Table } from 'react-bootstrap';
-import Card from 'react-bootstrap/Card';
-
 const RollerMotor = ({ros, namespace}) => {
   const [steps, setSteps] = useState(0);
   const [tpdoPublisher, setTpdoPublisher] = useState(null);
@@ -38,27 +35,68 @@ const RollerMotor = ({ros, namespace}) => {
   }, [ros]);
 
   return (
-    <>
-      <input
-        type="text"
-        // value={this.state.value}
-        // onChange={setSteps()}
-      />
-      {/* <Button
-        variant="outline-secondary"
-        onClick={() => sendTpdo(0x6030, 0, 1)}
-        style={{ marginLeft: '0.5rem' }}
-      >
-        1
-      </Button>
-      <Button
-        variant="outline-secondary"
-        onClick={() => sendTpdo(0x6039, 0, 1)}
-        style={{ marginLeft: '0.5rem' }}
-      >
-        Run
-      </Button> */}
-    </>
+    <div className="outContainer">
+            <h3>Roller Control (5號電機):</h3>
+            <div className="borderContainer">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Pulses:</td>
+                            <td>
+                                <input type="text" value={1600} onChange={()=>{}}/>
+                            </td>
+                            <td>
+                                <div className="btn">Set</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Speed:</td>
+                            <td>
+                                <input type="text" value={1} onChange={()=>{}}/>
+                            </td>
+                            <td>
+                                <div className="btn">Set</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Direction:</td>
+                            <td>
+                                <input type="text" value={1} onChange={()=>{}}/>
+                            </td>
+                            <td>
+                                <div className="btn">Set</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Current Steps:</td>
+                            <td>
+                                XXXX
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Mode:</td>
+                            <td>
+                                XXXX
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>State:</td>
+                            <td>
+                                XXXX
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div className="btn">Start</div>
+                            </td>
+                            <td colSpan={2}>
+                                <div className="btn bg-red">Emergency Stop</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
   )
 }
 

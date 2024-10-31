@@ -1,52 +1,56 @@
 import { useState } from 'react'
-
 import ROSLIB from 'roslib';
-
 import Rosconnection from './components/RosConnection';
 import TpdoPublisher from './components/TpdoPublisher';
 
+import RollerMotor from './components/RollerMotor';
 import Temperature from './components/Temperature';
 import Valve from './components/Valve';
+import ReedSwitch from './components/ReedSwitch';
+import PkgDisMotor from './components/PkgDisMotor';
+import PillGateMotor from './components/PillGateMotor';
+import PkgSquControl from './components/PkgSquControl';
+import ConBeltControl from './components/ConBeltControl';
+import PkgLenMotor from './components/PkgLenMotor';
 
-import { Row, Col } from 'react-bootstrap';
-
-import './App.css'
-import RollerMotor from './components/RollerMotor';
+import './css/App.css'
 
 function App() {
+
   const [ros, setRos] = useState(null);
 
   return (
     <>
-      <Rosconnection rosUrl="ws://192.168.0.106:9090" rosDomainId="1" setRos={setRos} />
-
-      <div>
-        <h4>ROS bridge: <input type="text" value="192.168.0.106" /> </h4>
+      {/* <Rosconnection rosUrl="ws://192.168.0.106:9090" rosDomainId="1" setRos={setRos} /> */}
+      
+      <div className="outContainer">
+        <h3>ROS Connection:</h3>
+        <div className='borderContainer'>
+          <h4>ROS bridge IP: <input type="text" value="192.168.0.106" onChange={()=>{}}/> </h4>
+          <h4>Connection: <span id="status">N/A </span></h4>
+        </div>
       </div>
-      <h4>Connection: <span id="status">N/A</span></h4>
-      {
-        ros &&
+
+      {/* {
+        ros && */}
         <>
-          <Row>
             <Temperature 
               ros={ros} 
               namespace={"packaging_machine_1"} 
             />
-          </Row>
-          <Row>
             <Valve 
               ros={ros} 
               namespace={"packaging_machine_1"}
             />
-          </Row>
-          {/* <Row>
-            <RollerMotor 
-              ros={ros} 
-              namespace={"packaging_machine_1"}
-            />
-          </Row> */}
+            <ReedSwitch />
+            <PkgDisMotor />
+            <PillGateMotor />
+            <PkgSquControl />
+            <ConBeltControl />
+            <RollerMotor />
+            <PkgLenMotor />
         </>
-      }
+      {/* } */}
     </>
   )
 }

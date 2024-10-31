@@ -1,16 +1,16 @@
 import React from 'react';
 
-function PkgDisMotor(props) {
+function ConBeltControl(props) {
     return (
         <div className="outContainer">
-            <h3>Package Dispenser Control (4號電機):</h3>
+            <h3>Conveyor Belt Control (1號電機):</h3>
             <div className="borderContainer">
                 <table>
                     <tbody>
                         <tr>
                             <td>Pulses:</td>
                             <td>
-                                <input type="text" value={1600} onChange={()=>{}}/>
+                                <input type="text" value={500} onChange={()=>{}}/>
                             </td>
                             <td>
                                 <div className="btn">Set</div>
@@ -26,14 +26,16 @@ function PkgDisMotor(props) {
                             </td>
                         </tr>
                         <tr>
-                            <td>Enable:</td>
-                            <td style={{display:"flex"}}>
-                                <div className="btn">Enable</div>
-                                <div className="btn">Disable</div>
+                            <td>Stop by Ph:</td>
+                            <td>
+                                <input type="text" value={1} onChange={()=>{}}/>
+                            </td>
+                            <td>
+                                <div className="btn">Set</div>
                             </td>
                         </tr>
                         <tr>
-                            <td>Current Pulse:</td>
+                            <td>Mode:</td>
                             <td>
                                 XXXX
                             </td>
@@ -59,4 +61,4 @@ function PkgDisMotor(props) {
     );
 }
 
-export default PkgDisMotor;
+export default ConBeltControl;
