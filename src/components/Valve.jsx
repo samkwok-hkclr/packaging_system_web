@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ROSLIB from 'roslib';
 
 const Valve = ({ros, namespace}) => {
-  const [valveStatus, setValveStatus] = useState(['Off', 'Off', 'Off', 'Off']);
+  const [valveState, setValveState] = useState(['Off', 'Off', 'Off', 'Off']);
   const [sdoWriter, setSdoWriter] = useState(null);
 
   const valveCtrlAddr = {
@@ -12,7 +12,7 @@ const Valve = ({ros, namespace}) => {
     4: 0x6053,
   };
 
-  const valveStatusAddr = {
+  const valveStateAddr = {
     1: 0x6054,
     2: 0x6055,
     3: 0x6056,
@@ -41,7 +41,7 @@ const Valve = ({ros, namespace}) => {
       return;
     }
 
-    const intervals = Object.values(valveStatusAddr).map((address, index) => {
+    const intervals = Object.values(valveStateAddr).map((address, index) => {
       return setInterval(() => {
         const sdoRead = new ROSLIB.Service({
           ros: ros,
@@ -55,11 +55,11 @@ const Valve = ({ros, namespace}) => {
         });
 
         sdoRead.callService(request, (result) => {
-          const newStatus = result.data ? 'On' : 'Off';
-          setValveStatus((prevStatus) => {
-            const updatedStatus = [...prevStatus];
-            updatedStatus[index] = newStatus; 
-            return updatedStatus;
+          const newState = result.data ? 'On' : 'Off';
+          setValveState((prevState) => {
+            const updatedState = [...prevState];
+            updatedState[index] = newState; 
+            return updatedState;
           });
         });
       }, 1000);
@@ -88,8 +88,8 @@ const Valve = ({ros, namespace}) => {
       <table className='valueTable'>
         <thead>
           <tr>
-            <th>Valve ID</th>
-            <th>Status</th>
+            <th>ID</th>
+            <th>State</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -97,17 +97,17 @@ const Valve = ({ros, namespace}) => {
           {[1, 2, 3, 4].map((valve) => (
             <tr key={valve}>
               <td>{valve}</td>
-              <td>{valveStatus[valve - 1]}</td>
+              <td>{valveState[valve - 1]}</td>
               <td>
                 <button
                   onClick={() => sendSDO(valveCtrlAddr[valve], 0, 1)}
-                  className={`btn ${valveStatus[valve - 1]==='On'?'chosen':''}`}
+                  className={`btn ${valveState[valve - 1]==='On'?'chosen':''}`}
                 >
                   On
                 </button>
                 <button
                   onClick={() => sendSDO(valveCtrlAddr[valve], 0, 0)}
-                  className={`btn ${valveStatus[valve - 1]==='Off'?'chosen':''}`}
+                  className={`btn ${valveState[valve - 1]==='Off'?'chosen':''}`}
                 >
                   Off
                 </button>

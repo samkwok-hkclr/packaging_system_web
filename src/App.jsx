@@ -16,12 +16,11 @@ import PkgLenMotor from './components/PkgLenMotor';
 import './css/App.css'
 
 function App() {
-
   const [ros, setRos] = useState(null);
 
   return (
     <>
-      {/* <Rosconnection rosUrl="ws://192.168.0.106:9090" rosDomainId="1" setRos={setRos} /> */}
+      <Rosconnection rosUrl="ws://192.168.0.106:9090" rosDomainId="1" setRos={setRos} />
       
       <div className="outContainer">
         <h3>ROS Connection:</h3>
@@ -31,8 +30,8 @@ function App() {
         </div>
       </div>
 
-      {/* {
-        ros && */}
+      {
+        ros &&
         <>
             <Temperature 
               ros={ros} 
@@ -42,15 +41,33 @@ function App() {
               ros={ros} 
               namespace={"packaging_machine_1"}
             />
-            <ReedSwitch />
-            <PkgDisMotor />
-            <PillGateMotor />
-            <PkgSquControl />
-            <ConBeltControl />
-            <RollerMotor />
+            <ReedSwitch 
+              ros={ros} 
+              namespace={"packaging_machine_1"}
+            />
+            <PkgDisMotor 
+              ros={ros} 
+              namespace={"packaging_machine_1"}
+            />
+            <PillGateMotor 
+              ros={ros} 
+              namespace={"packaging_machine_1"}
+            />
+            <PkgSquControl 
+              ros={ros} 
+              namespace={"packaging_machine_1"}
+            />
+            <ConBeltControl 
+              ros={ros} 
+              namespace={"packaging_machine_1"}
+            />
+            <RollerMotor
+              ros={ros} 
+              namespace={"packaging_machine_1"}
+            />
             <PkgLenMotor />
         </>
-      {/* } */}
+      }
     </>
   )
 }

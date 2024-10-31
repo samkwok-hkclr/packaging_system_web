@@ -1,6 +1,88 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import ROSLIB from 'roslib';
 
-function PillGateMotor(props) {
+function PillGateMotor({ros, namespace}) {
+    const [pulses, setPulses] = useState(800);
+    const [currPulses, setCurrPulses] = useState(0);
+    const [mode, setMode] = useState(0);
+    const [state, setState] = useState(0);
+    const [sdoWriter, setSdoWriter] = useState(null);
+
+    const pillGateAddr = {
+        0: 0x6024,
+        1: 0x6027,
+        2: 0x6028
+    }
+
+    useEffect(() => {
+        if (!ros) {
+          return;
+        }
+    
+        const intervals = Object.values(pillGateAddr).map((address, index) => {
+          return setInterval(() => {
+            const sdoRead = new ROSLIB.Service({
+                ros: ros,
+                name: '/' + namespace + '/sdo_read',
+                serviceType: 'canopen_interfaces/srv/CORead',
+            });
+    
+            const request = new ROSLIB.ServiceRequest({
+                index: address,
+                subindex: 0,
+            });
+    
+            sdoRead.callService(request, (result) => {
+                switch(index)
+                {
+                    case 0:
+                        setCurrPulses(result.data);
+                        break;
+                    case 1:
+                        setMode(result.data);
+                        break;
+                    case 2:
+                        setState(result.data);
+                        break;
+                }
+            });
+          }, 1000);
+        });
+    
+        return () => {
+          intervals.forEach(clearInterval);
+        };
+    }, [ros, namespace]);
+
+    useEffect(() => {
+        if (!ros) {
+          return;
+        }
+    
+        const sdoWrite = new ROSLIB.Service({
+          ros: ros,
+          name: '/' + namespace + '/sdo_write',
+          serviceType: 'canopen_interfaces/srv/COWrite',
+        });
+    
+        setSdoWriter(sdoWrite);
+    
+        return () => {
+        };
+    }, [ros, namespace]);
+
+    const sendSDO = ((index, subindex, data)=> {
+        const request = new ROSLIB.ServiceRequest({
+          index: index,
+          subindex: subindex,
+          data:data
+        });
+        
+        sdoWriter.callService(request, (result) => {
+            console.log(result.success);
+        });
+    })
+
     return (
         <div className="outContainer">
             <h3>Pill Gate Control (3號電機):</h3>
@@ -10,20 +92,19 @@ function PillGateMotor(props) {
                         <tr>
                             <td>Pulses:</td>
                             <td>
-                                <input type="text" value={1600} onChange={()=>{}}/>
+                                <input type="text" value={pulses} onChange={(e)=>setPulses(parseInt(e.target.value))}/>
                             </td>
                             <td>
-                                <div className="btn">Set</div>
+                                <div className="btn" onClick={() => sendSDO(0x6021, 0, pulses)}>Set</div>
                             </td>
                         </tr>
                         <tr>
-                            <td>Directions:</td>
-                            <td>
-                                <input type="text" value={1} onChange={()=>{}}/>
+                            <td>Direction:</td>
+                            <td style={{display:"flex"}}>
+                                <div className="btn" onClick={() => sendSDO(0x6022, 0, 1)}>1</div>
+                                <div className="btn" onClick={() => sendSDO(0x6022, 0, 0)}>0</div>
                             </td>
-                            <td>
-                                <div className="btn">Set</div>
-                            </td>
+    
                         </tr>
                         <tr>
                             <td>Enable:</td>
@@ -35,22 +116,28 @@ function PillGateMotor(props) {
                         <tr>
                             <td>Current Pulse:</td>
                             <td>
-                                XXXX
+                                {currPulses}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Mode:</td>
+                            <td>
+                                {mode}
                             </td>
                         </tr>
                         <tr>
                             <td>State:</td>
                             <td>
-                                XXXX
+                                {state}
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <div className="btn">Start</div>
+                                <div className="btn" onClick={() => sendSDO(0x6029, 0, 1)}>Start</div>
                             </td>
-                            <td colSpan={2}>
+                            {/* <td colSpan={2}>
                                 <div className="btn bg-red">Emergency Stop</div>
-                            </td>
+                            </td> */}
                         </tr>
                     </tbody>
                 </table>

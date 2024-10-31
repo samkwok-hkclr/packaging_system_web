@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ROSLIB from 'roslib';
 
 const Temperature = ({ros, namespace}) => {
-
-  const [temperature, setTemperature] = useState(0);
+  const [temperature, setTemperature] = useState(999);
 
   useEffect(() => {
     if (!ros) {
@@ -23,7 +22,7 @@ const Temperature = ({ros, namespace}) => {
           setTemperature(msg.data);
           break;
       }
-      rpdo.unsubscribe();
+      // rpdo.unsubscribe();
     })
 
   }, []);
