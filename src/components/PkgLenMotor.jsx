@@ -4,6 +4,7 @@ import ROSLIB from 'roslib';
 function PkgLenMotor({ ros, namespace }) {
   const [steps, setSteps] = useState(1);
   const [speed, setSpeed] = useState(100);
+  const [targetMode, setTargetMode] = useState(0);
   const [currSteps, setCurrSteps] = useState(999);
   const [mode, setMode] = useState(999);
   const [state, setState] = useState(999);
@@ -105,6 +106,14 @@ function PkgLenMotor({ ros, namespace }) {
               </td>
               <td>
                 <div className="btn" onClick={() => sendSDO(0x6041, 0, speed)}>Set</div>
+              </td>
+            </tr>
+            <tr>
+              <td>Mode:</td>
+              <td style={{ display: "flex" }}>
+                <div className="btn" onClick={() => sendSDO(0x6047, 0, 0)}>0</div>
+                <div className="btn" onClick={() => sendSDO(0x6047, 0, 1)}>1</div>
+                <div className="btn" onClick={() => sendSDO(0x6047, 0, 2)}>2</div>
               </td>
             </tr>
             <tr>

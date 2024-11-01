@@ -90,11 +90,9 @@ function ConBeltControl({ ros, namespace }) {
             </tr>
             <tr>
               <td>Stop by Ph:</td>
-              <td>
-                <input type="text" value={stop} onChange={(e) => setStop(parseInt(e.target.value))} />
-              </td>
-              <td>
-                <div className="btn" onClick={() => sendSDO(0x6081, 0, stop)}>Set</div>
+              <td style={{ display: "flex" }}>
+                <div className="btn" onClick={() => sendSDO(0x6081, 0, 0)}>0</div>
+                <div className="btn" onClick={() => sendSDO(0x6081, 0, 1)}>1</div>
               </td>
             </tr>
             <tr>
@@ -106,11 +104,11 @@ function ConBeltControl({ ros, namespace }) {
             <tr>
               <td style={{ display: "flex" }}>
                 <div className="btn" onClick={() => {
-                  sendSDO(0x6082, 0, 1);
+                  sendSDO(0x6082, 0, 0);
                   sendSDO(0x6089, 0, 1);
                 }}>Fwd</div>
                 <div className="btn" onClick={() => {
-                  sendSDO(0x6082, 0, 0);
+                  sendSDO(0x6082, 0, 1);
                   sendSDO(0x6089, 0, 1);
                 }}>Rev</div>
               </td>

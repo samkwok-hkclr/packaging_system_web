@@ -93,11 +93,11 @@ function PkgSquControl({ ros, namespace }) {
             <tr>
               <td style={{ display: "flex" }}>
                 <div className="btn" onClick={() => {
-                  sendSDO(0x6072, 0, 1);
+                  sendSDO(0x6072, 0, 0);
                   sendSDO(0x6079, 0, 1);
                 }}>Push</div>
                 <div className="btn" onClick={() => {
-                  sendSDO(0x6072, 0, 0);
+                  sendSDO(0x6072, 0, 1);
                   sendSDO(0x6079, 0, 1);
                 }}>Pull</div>
               </td>
