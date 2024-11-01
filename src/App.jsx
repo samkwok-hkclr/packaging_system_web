@@ -21,11 +21,11 @@ function App() {
   return (
     <>
       <Rosconnection rosUrl="ws://192.168.0.106:9090" rosDomainId="1" setRos={setRos} />
-      
+
       <div className="outContainer">
         <h3>ROS Connection:</h3>
         <div className='borderContainer'>
-          <h4>ROS bridge IP: <input type="text" value="192.168.0.106" onChange={()=>{}}/> </h4>
+          <h4>ROS bridge IP: <input type="text" value="192.168.0.106" onChange={() => { }} /> </h4>
           <h4>Connection: <span id="status">N/A </span></h4>
         </div>
       </div>
@@ -33,39 +33,42 @@ function App() {
       {
         ros &&
         <>
-            <Temperature 
-              ros={ros} 
-              namespace={"packaging_machine_1"} 
-            />
-            <Valve 
-              ros={ros} 
-              namespace={"packaging_machine_1"}
-            />
-            <ReedSwitch 
-              ros={ros} 
-              namespace={"packaging_machine_1"}
-            />
-            <PkgDisMotor 
-              ros={ros} 
-              namespace={"packaging_machine_1"}
-            />
-            <PillGateMotor 
-              ros={ros} 
-              namespace={"packaging_machine_1"}
-            />
-            <PkgSquControl 
-              ros={ros} 
-              namespace={"packaging_machine_1"}
-            />
-            <ConBeltControl 
-              ros={ros} 
-              namespace={"packaging_machine_1"}
-            />
-            <RollerMotor
-              ros={ros} 
-              namespace={"packaging_machine_1"}
-            />
-            <PkgLenMotor />
+          <Temperature
+            ros={ros}
+            namespace={"packaging_machine_1"}
+          />
+          <Valve
+            ros={ros}
+            namespace={"packaging_machine_1"}
+          />
+          <ReedSwitch
+            ros={ros}
+            namespace={"packaging_machine_1"}
+          />
+          <PkgDisMotor
+            ros={ros}
+            namespace={"packaging_machine_1"}
+          />
+          <PillGateMotor
+            ros={ros}
+            namespace={"packaging_machine_1"}
+          />
+          <PkgSquControl
+            ros={ros}
+            namespace={"packaging_machine_1"}
+          />
+          <ConBeltControl
+            ros={ros}
+            namespace={"packaging_machine_1"}
+          />
+          <RollerMotor
+            ros={ros}
+            namespace={"packaging_machine_1"}
+          />
+          <PkgLenMotor
+            ros={ros}
+            namespace={"packaging_machine_1"}
+          />
         </>
       }
     </>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ROSLIB from 'roslib';
 
-const Temperature = ({ros, namespace}) => {
+const Temperature = ({ ros, namespace }) => {
   const [temperature, setTemperature] = useState(999);
 
   useEffect(() => {
@@ -16,8 +16,7 @@ const Temperature = ({ros, namespace}) => {
     });
 
     rpdo.subscribe((msg) => {
-      switch (msg.index)
-      {
+      switch (msg.index) {
         case 0x6001:
           setTemperature(msg.data);
           break;
@@ -25,6 +24,9 @@ const Temperature = ({ros, namespace}) => {
       // rpdo.unsubscribe();
     })
 
+    return () => {
+      rpdo.unsubscribe();
+    };
   }, []);
 
   return (
