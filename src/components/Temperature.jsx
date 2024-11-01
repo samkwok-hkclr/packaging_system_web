@@ -3,6 +3,7 @@ import ROSLIB from 'roslib';
 
 const Temperature = ({ ros, namespace }) => {
   const [temperature, setTemperature] = useState(999);
+  const [sdoWriter, setSdoWriter] = useState(null);
 
   useEffect(() => {
     if (!ros) {
@@ -29,12 +30,59 @@ const Temperature = ({ ros, namespace }) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (!ros) {
+      return;
+    }
+
+    const sdoWrite = new ROSLIB.Service({
+      ros: ros,
+      name: '/' + namespace + '/sdo_write',
+      serviceType: 'canopen_interfaces/srv/COWrite',
+    });
+
+    setSdoWriter(sdoWrite);
+
+    return () => {
+    };
+  }, [ros, namespace]);
+
+  const sendSDO = ((index, subindex, data) => {
+    const request = new ROSLIB.ServiceRequest({
+      index: index,
+      subindex: subindex,
+      data: data
+    });
+
+    sdoWriter.callService(request, (result) => {
+      console.log(result.success);
+    });
+  })
+
   return (
     <div className='outContainer'>
       <h3>Heater:</h3>
       <div className="borderContainer">
-        <h4>Temperature : {temperature} / 125 </h4>
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                <div className="borderContainer">
+                  <h4>Temperature : {temperature} / 125 </h4>
+                </div>
+              </td>
+              <td style={{ display: "flex" }}>
+                <div className="btn" onClick={() => sendSDO(0x6003, 0, 1)}>On</div>
+                <div className="btn" onClick={() => sendSDO(0x6003, 0, 0)}>Off</div>
+              </td>
+            </tr>
+
+
+          </tbody>
+        </table>
       </div>
+
+
     </div>
   )
 }
