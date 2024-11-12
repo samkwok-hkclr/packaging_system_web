@@ -3,6 +3,7 @@ import ROSLIB from 'roslib';
 
 const Temperature = ({ ros, namespace }) => {
   const [temperature, setTemperature] = useState(999);
+  const [control, setControl] = useState(999);
   const [sdoWriter, setSdoWriter] = useState(null);
 
   useEffect(() => {
@@ -20,6 +21,9 @@ const Temperature = ({ ros, namespace }) => {
       switch (msg.index) {
         case 0x6001:
           setTemperature(msg.data);
+          break;
+        case 0x6008:
+          setControl(msg.data);
           break;
       }
       // rpdo.unsubscribe();
@@ -69,6 +73,7 @@ const Temperature = ({ ros, namespace }) => {
               <td>
                 <div className="borderContainer">
                   <h4>Temperature : {temperature} / 125 </h4>
+                  <h4>Control : {control} / 2000 </h4>
                 </div>
               </td>
               <td style={{ display: "flex" }}>

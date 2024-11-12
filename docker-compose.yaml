@@ -1,0 +1,20 @@
+version: '3.7'
+  
+services:
+  packaging_test_web:
+    image: packaging_test_web:v0
+    container_name: packaging_test_web
+    hostname: packaging_test_web
+    ports:
+      - "8080:8080/tcp"
+    # restart: unless-stopped
+    # networks:
+    #   packaging_network:
+    #     ipv4_address: 10.8.104.10
+
+# networks:
+#   packaging_network:
+#     ipam:
+#       driver: default
+#       config:
+#         - subnet: 10.8.104.0/24

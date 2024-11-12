@@ -128,13 +128,22 @@ const RollerMotor = ({ ros, namespace }) => {
             <tr>
               <td style={{ display: "flex" }}>
                 <div className="btn" onClick={() => {
+                  sendSDO(0x6030, 0, 1);
                   sendSDO(0x6032, 0, 0);
+                  sendSDO(0x6037, 0, 0);
                   sendSDO(0x6039, 0, 1);
-                }}>Fwd</div>
-                <div className="btn" onClick={() => {
+                }}>Move</div>
+                {/* <div className="btn" onClick={() => {
                   sendSDO(0x6032, 0, 1);
+                  sendSDO(0x6037, 0, 0);
                   sendSDO(0x6039, 0, 1);
-                }}>Rev</div>
+                }}>Rev</div> */}
+                <div className="btn" onClick={() => {
+                  sendSDO(0x6030, 0, 1);
+                  sendSDO(0x6032, 0, 0);
+                  sendSDO(0x6037, 0, 1);
+                  sendSDO(0x6039, 0, 1);
+                }}>Home</div>
               </td>
               <td colSpan={2}>
                 <div className="btn bg-red" onClick={() => sendSDO(0x6039, 0, 0)}>Stop</div>

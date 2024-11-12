@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ROSLIB from 'roslib';
 
 function PkgSquControl({ ros, namespace }) {
-  const [speed, setSpeed] = useState(1000);
+  const [speed, setSpeed] = useState(200);
   const [state, setState] = useState(999);
   const [sdoWriter, setSdoWriter] = useState(null);
 
@@ -81,7 +81,7 @@ function PkgSquControl({ ros, namespace }) {
                 <input type="text" value={speed} onChange={(e) => setSpeed(parseInt(e.target.value))} />
               </td>
               <td>
-                <div className="btn" onClick={() => sendSDO(0x6070, 0, 1)}>Set</div>
+                <div className="btn" onClick={() => sendSDO(0x6070, 0, speed)}>Set</div>
               </td>
             </tr>
             <tr>
@@ -94,10 +94,12 @@ function PkgSquControl({ ros, namespace }) {
               <td style={{ display: "flex" }}>
                 <div className="btn" onClick={() => {
                   sendSDO(0x6072, 0, 0);
+                  sendSDO(0x6073, 0, 1);
                   sendSDO(0x6079, 0, 1);
                 }}>Push</div>
                 <div className="btn" onClick={() => {
                   sendSDO(0x6072, 0, 1);
+                  sendSDO(0x6073, 0, 0);
                   sendSDO(0x6079, 0, 1);
                 }}>Pull</div>
               </td>

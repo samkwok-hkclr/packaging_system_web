@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ROSLIB from 'roslib';
 
 function PkgDisMotor({ ros, namespace }) {
-  const [pulses, setPulses] = useState(800);
+  const [pulses, setPulses] = useState(0);
   const [currPulses, setCurrPulses] = useState(999);
   const [state, setState] = useState(999);
   const [sdoWriter, setSdoWriter] = useState(null);
@@ -84,16 +84,16 @@ function PkgDisMotor({ ros, namespace }) {
               <td>
                 <input type="text" value={pulses} onChange={(e) => setPulses(parseInt(e.target.value))} />
               </td>
-              <td>
+              {/* <td>
                 <div className="btn" onClick={() => sendSDO(0x6011, 0, pulses)}>Set</div>
-              </td>
+              </td> */}
             </tr>
             <tr>
               <td>Directions:</td>
-              <td style={{ display: "flex" }}>
+              {/* <td style={{ display: "flex" }}>
                 <div className="btn" onClick={() => sendSDO(0x6012, 0, 1)}>1</div>
                 <div className="btn" onClick={() => sendSDO(0x6012, 0, 0)}>0</div>
-              </td>
+              </td> */}
             </tr>
             <tr>
               <td>Current Pulse:</td>
@@ -109,7 +109,11 @@ function PkgDisMotor({ ros, namespace }) {
             </tr>
             <tr>
               <td>
-                <div className="btn" onClick={() => sendSDO(0x6019, 0, 1)}>Start</div>
+                <div className="btn" onClick={() => {
+                  sendSDO(0x6011, 0, 2264);
+                  sendSDO(0x6012, 0, 0)
+                  sendSDO(0x6019, 0, 1);
+                }}>80mm</div>
               </td>
             </tr>
           </tbody>

@@ -1,4 +1,4 @@
-FROM node:18-alpine AS packaging_web_img
+FROM node:18-alpine AS packaging_test_web_img
 
 ENV PROJECT_NAME=packaging_test_web
 RUN mkdir -p /${PROJECT_NAME}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ROSLIB from 'roslib';
 
 function PillGateMotor({ ros, namespace }) {
-  const [pulses, setPulses] = useState(800);
+  const [pulses, setPulses] = useState(2241);
   const [currPulses, setCurrPulses] = useState(0);
   const [mode, setMode] = useState(0);
   const [state, setState] = useState(0);
@@ -91,17 +91,17 @@ function PillGateMotor({ ros, namespace }) {
             <tr>
               <td>Pulses:</td>
               <td>
-                <input type="text" value={pulses} onChange={(e) => setPulses(parseInt(e.target.value))} />
+                {/* <input type="text" value={pulses} onChange={(e) => setPulses(parseInt(e.target.value))} /> */}
               </td>
               <td>
-                <div className="btn" onClick={() => sendSDO(0x6021, 0, pulses)}>Set</div>
+                {/* <div className="btn" onClick={() => sendSDO(0x6021, 0, pulses)}>Set</div> */}
               </td>
             </tr>
             <tr>
               <td>Direction:</td>
               <td style={{ display: "flex" }}>
-                <div className="btn" onClick={() => sendSDO(0x6022, 0, 1)}>1</div>
-                <div className="btn" onClick={() => sendSDO(0x6022, 0, 0)}>0</div>
+                {/* <div className="btn" onClick={() => sendSDO(0x6022, 0, 1)}>Release</div>
+                <div className="btn" onClick={() => sendSDO(0x6022, 0, 0)}>Home Dir</div> */}
               </td>
             </tr>
             <tr>
@@ -123,8 +123,21 @@ function PillGateMotor({ ros, namespace }) {
               </td>
             </tr>
             <tr>
-              <td>
-                <div className="btn" onClick={() => sendSDO(0x6029, 0, 1)}>Start</div>
+              <td>Control:</td>
+              <td style={{ display: "flex" }}>
+                {/* <div className="btn" onClick={() => {
+                  sendSDO(0x6029, 0, 1);
+                }}>Start</div> */}
+                <div className="btn" onClick={() => {
+                  sendSDO(0x6021, 0, 2241)
+                  sendSDO(0x6022, 0, 1)
+                  sendSDO(0x6029, 0, 1);
+                }}>Open</div>
+                <div className="btn" onClick={() => {
+                  sendSDO(0x6021, 0, 2241)
+                  sendSDO(0x6022, 0, 0)
+                  sendSDO(0x6029, 0, 1);
+                }}>Close</div>
               </td>
             </tr>
           </tbody>

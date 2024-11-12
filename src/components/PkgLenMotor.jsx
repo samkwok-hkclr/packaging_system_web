@@ -113,7 +113,7 @@ function PkgLenMotor({ ros, namespace }) {
               <td style={{ display: "flex" }}>
                 <div className="btn" onClick={() => sendSDO(0x6047, 0, 0)}>0</div>
                 <div className="btn" onClick={() => sendSDO(0x6047, 0, 1)}>1</div>
-                <div className="btn" onClick={() => sendSDO(0x6047, 0, 2)}>2</div>
+                {/* <div className="btn" onClick={() => sendSDO(0x6047, 0, 2)}>2</div> */}
               </td>
             </tr>
             <tr>

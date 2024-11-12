@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ROSLIB from 'roslib';
 
 function ConBeltControl({ ros, namespace }) {
-  const [speed, setSpeed] = useState(1000);
+  const [speed, setSpeed] = useState(300);
   const [dir, setDir] = useState(0);
   const [stop, setStop] = useState(0);
   const [state, setState] = useState(999);
