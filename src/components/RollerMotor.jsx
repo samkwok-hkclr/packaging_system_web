@@ -92,19 +92,19 @@ const RollerMotor = ({ ros, namespace }) => {
             <tr>
               <td>Steps:</td>
               <td>
-                <input type="text" value={steps} onChange={(e) => setSteps(parseInt(e.target.value))} />
+                {/* <input type="text" value={steps} onChange={(e) => setSteps(parseInt(e.target.value))} /> */}
               </td>
               <td>
-                <div className="btn" onClick={() => sendSDO(0x6030, 0, steps)}>Set</div>
+                {/* <div className="btn" onClick={() => sendSDO(0x6030, 0, steps)}>Set</div> */}
               </td>
             </tr>
             <tr>
               <td>Speed:</td>
               <td>
-                <input type="text" value={speed} onChange={(e) => setSpeed(parseInt(e.target.value))} />
+                {/* <input type="text" value={speed} onChange={(e) => setSpeed(parseInt(e.target.value))} /> */}
               </td>
               <td>
-                <div className="btn" onClick={() => sendSDO(0x6031, 0, speed)}>Set</div>
+                {/* <div className="btn" onClick={() => sendSDO(0x6031, 0, speed)}>Set</div> */}
               </td>
             </tr>
             <tr>

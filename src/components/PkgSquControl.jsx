@@ -78,10 +78,10 @@ function PkgSquControl({ ros, namespace }) {
             <tr>
               <td>Speed:</td>
               <td>
-                <input type="text" value={speed} onChange={(e) => setSpeed(parseInt(e.target.value))} />
+                {/* <input type="text" value={speed} onChange={(e) => setSpeed(parseInt(e.target.value))} /> */}
               </td>
               <td>
-                <div className="btn" onClick={() => sendSDO(0x6070, 0, speed)}>Set</div>
+                {/* <div className="btn" onClick={() => sendSDO(0x6070, 0, speed)}>Set</div> */}
               </td>
             </tr>
             <tr>

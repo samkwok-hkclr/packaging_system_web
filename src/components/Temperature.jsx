@@ -72,7 +72,7 @@ const Temperature = ({ ros, namespace }) => {
             <tr>
               <td>
                 <div className="borderContainer">
-                  <h4>Temperature : {temperature} / 115 </h4>
+                  <h4>Temperature : {temperature} / 120 </h4>
                   <h4>Control : {control} / 2000 </h4>
                 </div>
               </td>

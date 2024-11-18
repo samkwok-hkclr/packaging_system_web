@@ -82,7 +82,7 @@ function PkgDisMotor({ ros, namespace }) {
             <tr>
               <td>Pulses:</td>
               <td>
-                <input type="text" value={pulses} onChange={(e) => setPulses(parseInt(e.target.value))} />
+                {/* <input type="text" value={pulses} onChange={(e) => setPulses(parseInt(e.target.value))} /> */}
               </td>
               {/* <td>
                 <div className="btn" onClick={() => sendSDO(0x6011, 0, pulses)}>Set</div>
