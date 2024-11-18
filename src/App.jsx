@@ -20,12 +20,12 @@ function App() {
 
   return (
     <>
-      <Rosconnection rosUrl="ws://192.168.9.5:9090" rosDomainId="1" setRos={setRos} />
+      <Rosconnection rosUrl="ws://192.168.9.13:9090" rosDomainId="1" setRos={setRos} />
 
       <div className="outContainer">
         <h3>ROS Connection:</h3>
         <div className='borderContainer'>
-          <h4>ROS bridge IP: <input type="text" value="192.168.9.5" onChange={() => { }} /> </h4>
+          <h4>ROS bridge IP: <input type="text" value="192.168.9.13" onChange={() => { }} /> </h4>
           <h4>Connection: <span id="status">N/A </span></h4>
         </div>
       </div>

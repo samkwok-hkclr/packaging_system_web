@@ -134,7 +134,7 @@ function PillGateMotor({ ros, namespace }) {
                   sendSDO(0x6029, 0, 1);
                 }}>Open</div>
                 <div className="btn" onClick={() => {
-                  sendSDO(0x6021, 0, 2241)
+                  sendSDO(0x6021, 0, 9143)
                   sendSDO(0x6022, 0, 0)
                   sendSDO(0x6029, 0, 1);
                 }}>Close</div>
